@@ -8,6 +8,12 @@ if (isset($_GET['userid'])) {
   $result = $mysqli->query($sql);
   if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
+      
+      foreach($row as $strring)
+      {
+        trim($strring);
+      }
+      
       $servername = "bluetec-roleplay";
       $serverip = "server.bluetec.de";
       $username = $row["aliases"];
@@ -21,18 +27,21 @@ if (isset($_GET['userid'])) {
       $coplevel = $row["coplevel"];
       $mediclevel = $row["mediclevel"];
       $imgeditorstate = $row["imgeditorstate"];
+      
       if($coplevel > 0)
       {
-        switch($coplevel){
+        switch($coplevel)
+        {
           case 1: $frank = "( Azubi )"; break;
           case 2: $frank = "( Wachtmeister )"; break;
-          case 3: $frank = "( stllv. Chef )"; break;
+          case 3: $frank = "( stv. Chef )"; break;
           case 4: $frank = "( Polizeichef )"; break;
           default: $frank = "( Rekrut )";
         }
         $fraktion = 'Fraktion: Polizei (' . $frank . ')';
       } //ende coplevel
-      if ($mediclevel > 0) {
+      if ($mediclevel > 0) 
+      {
         switch($mediclevel)
         {
           case 1: $frank = "( Azubi )"; break;
@@ -44,7 +53,8 @@ if (isset($_GET['userid'])) {
         $fraktion = 'Fraktion: Sanitaeter (' . $frank . ')';
       } //ende mediclevel
 
-      if($imgeditorstate == "true"){
+      if($imgeditorstate == "true")
+      {
       header("Content-type: image/png");
       $image = imagecreatefrompng("image.png");
       $color_black = ImageColorAllocate($image, 0, 0, 0);
@@ -56,7 +66,11 @@ if (isset($_GET['userid'])) {
       ImageString($image, "6", "1", "160", "$servername", $color_black);
       ImageString($image, "6", "240", "160", "$serverip", $color_black);
       ImagePNG($image);
-        } else { echo 'Nicht vorhanden!'; }
+      }
+      else 
+      { 
+        echo 'Nicht vorhanden!';
+      }
     }
   }
 }
