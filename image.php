@@ -9,11 +9,6 @@ if (isset($_GET['userid'])) {
   if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
       
-      foreach($row as $strring)
-      {
-        trim($strring);
-      }
-      
       $servername = "bluetec-roleplay";
       $serverip = "server.bluetec.de";
       $username = $row["aliases"];
