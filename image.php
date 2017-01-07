@@ -2,14 +2,16 @@
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
 
+$lines = file ('includes/settings.txt');
+
 if (isset($_GET['userid'])) {
   $userid = $_GET['userid'];
   $sql = "SELECT aliases, cash, bankacc, coplevel, mediclevel, imgeditorstate FROM players WHERE pid = '$userid'";
   $result = $mysqli->query($sql);
   if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-      $servername = "bluetec-roleplay";
-      $serverip = "server.bluetec.de";
+      $servername = $lines[0];
+      $serverip = $lines[1];
       $username = $row["aliases"];
       $bankacc = $row["bankacc"];
       $bankmoney = "Konto: $bankacc";
@@ -46,7 +48,7 @@ if (isset($_GET['userid'])) {
 
       if($imgeditorstate == "true"){
       header("Content-type: image/png");
-      $image = imagecreatefrompng("image.png");
+      $image = imagecreatefrompng("images/image.png");
       $color_black = ImageColorAllocate($image, 0, 0, 0);
 
       ImageString($image, "6", "25", "25", "$username", $color_black);
