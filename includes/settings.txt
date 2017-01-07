@@ -1,0 +1,2 @@
+bluetec-reallife
+server.bluetec-reallife.de

@@ -37,12 +37,28 @@ sec_session_start();
                                 activateuser($activate, $mysqli);
                             }
                             ?>
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Suchen">
+                            <form action="includes/process_search.php" method="post" name="settings_form">
+							<div class="input-group">
+                                <input type="text" name="userid" id="userid" class="form-control" placeholder="Suchen">
                                 <span class="input-group-btn">
-                                  <button class="btn btn-default" type="button">Go!</button>
+                                  <button type="submit" class="btn btn-default" type="button">Go!</button>
                                 </span>
                             </div><!-- /input-group -->
+							</form>
+							
+							
+							
+							<?php if(isset($_GET['search'])){
+								$userid = $_GET['search'];
+								
+								echo '<table class="table"><thead><tr><th>UserID</th><th>Spielername</th><th>Status</th></tr></thead>
+                                <tbody>';
+                                    search($userid, $mysqli);
+                                echo '</tbody></table>';
+							}
+							
+							?>
+							
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -59,6 +75,7 @@ sec_session_start();
                         </div> 
                     </div>
                 </div>
+				<center><a href="settings.php">Einstellungen</a></center>
             </div>
         </div>
     </div>

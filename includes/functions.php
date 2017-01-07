@@ -228,43 +228,26 @@ function activateuser($activate, $mysqli){
 	return 1;
 }
 
-function createImage($userid, $mysqli){
-  if ($stmt = $mysqli->prepare("SELECT aliases, cash, bankacc, coplevel, mediclevel FROM players WHERE uid = '$userid'")) {
-      $stmt->bind_param('sssss', $username, $cash, $bankacc, $coplevel, $mediclevel);  // Bind "$email" to parameter.
-      $stmt->execute();    // Führe die vorbereitete Anfrage aus.
-      $stmt->store_result();
+function save_settings($servername, $serverip){
+	$f = fopen("settings.txt", "w");
+	fwrite($f, "$servername\n$serverip");
+	fclose($f);
+}
 
-      // hole Variablen von result.
-      $stmt->bind_result($username, $handmoney, $bankmoney, $coplevel, $mediclevel);
-      $stmt->fetch();
+function search($userid, $mysqli){
+	$sql = "SELECT pid, aliases, imgeditorstate FROM players WHERE pid = '$userid'";
+  	$result = $mysqli->query($sql);
 
-  $servername = "bluetec-roleplay";
-  $serverip = "server.bluetec.de";
-  $bankmoney = "Konto: ' . $bankmoney . '";
-  $handmoney = "Bargeld: ' . $handmoney . '";
-  $fraktion = 'Fraktion: Zivilist';
-  if($row["coplevel"] > 1)
-  {
-    switch($row["coplevel"]){
-      case 1: $frank = "( Azubi )"; break;
-      case 2: $frank = "( Wachtmeister )"; break;
-      case 3: $frank = "( stllv. Chef )"; break;
-      case 4: $frank = "( Polizeichef )"; break;
-      default: $frank = "( Rekrut )";
-    $fraktion = 'Fraktion: Polizei (' . $frank . ')';
-    }
-  }
-  if ($row["mediclevel"] > 1) {
-    switch($row["mediclevel"])
-    {
-      case 1: $frank = "( Azubi )"; break;
-      case 2: $frank = "( Arzt )"; break;
-      case 3: $frank = "( Chefarzt )"; break;
-      case 4: $frank = "( Leitung )"; break;
-      default: $frank = "( Anwaerter )";
-    $fraktion = 'Fraktion: Sanitaeter (' . $frank . ')';
-    }
-  }
-  }
-  return array($servername, $serverip, $username, $bankmoney, $handmoney, $fraktion);
+  	if ($result->num_rows > 0) {
+  		while($row = $result->fetch_assoc()) {
+  				echo '<tr><td>' . $row["pid"]. '</td>';
+  				echo '<td>' . $row["aliases"]. '</td>';
+          if($row["imgeditorstate"] == "true"){ echo '<td><a href="userlist.php?deactivate=' . $row["pid"]. '"><i class="fa fa-check" aria-hidden="true"></i></a> <a href="image.php?userid=' . $row["pid"]. '"><i class="fa fa-picture-o" aria-hidden="true"></i></a></td></tr>'; } else { echo '<td><a href="userlist.php?activate=' . $row["pid"]. '"><i class="fa fa-times" aria-hidden="true"></i></a></td></tr>'; }
+          //if($row["imgeditorstate"] == "true"){ echo '<td>geil</td></tr>'; } else { echo '<td>test</td></tr>'; }
+          //echo '<td>' . $row["imgeditorstate"]. '</td></tr>';
+  		}
+  	} else {
+  		echo "0 results";
+  	}
+  	return 1;
 }
